@@ -4,7 +4,9 @@ namespace Packstub\Features;
 
 use Closure;
 use Filament\Contracts\Plugin;
+use Filament\Facades\Filament;
 use Filament\Panel;
+use Illuminate\Support\Facades\Gate;
 use Packstub\Features\Filament\Pages\FeatureFlags;
 use Packstub\Features\Filament\Pages\FeatureOverrides;
 use Packstub\Features\Filament\Pages\Plan;
@@ -34,6 +36,8 @@ class FeaturesPlugin implements Plugin
 
     /** @var class-string<FeatureOverrides>|null */
     protected ?string $overridesPage = null;
+
+    protected ?Closure $canManageUsing = null;
 
     protected string|Closure|null $navigationGroup = null;
 
@@ -125,7 +129,8 @@ class FeaturesPlugin implements Plugin
 
     /**
      * Register the admin pages — feature flags (global kill switches) and
-     * per-scope overrides. Meant for a central/admin panel.
+     * per-scope overrides. Meant for a central/admin panel: who may open
+     * them is decided by `canManageUsing()`.
      *
      * @param  class-string<FeatureFlags>|null  $flags
      * @param  class-string<FeatureOverrides>|null  $overrides
@@ -136,6 +141,40 @@ class FeaturesPlugin implements Plugin
         $this->overridesPage = $overrides;
 
         return $this;
+    }
+
+    /**
+     * Who may open the admin pages: fn (Authenticatable $user): bool.
+     *
+     * Without it a `manageFeatures` Gate ability is used when one is defined;
+     * otherwise the pages are open on a panel without tenancy (the panel's own
+     * access check is the operator's) and closed on a tenant panel, where every
+     * member would otherwise see the global kill switches.
+     */
+    public function canManageUsing(?Closure $callback): static
+    {
+        $this->canManageUsing = $callback;
+
+        return $this;
+    }
+
+    public function canManage(): bool
+    {
+        $user = Filament::auth()->user();
+
+        if ($user === null) {
+            return false;
+        }
+
+        if ($this->canManageUsing !== null) {
+            return (bool) ($this->canManageUsing)($user);
+        }
+
+        if (Gate::has('manageFeatures')) {
+            return Gate::forUser($user)->allows('manageFeatures');
+        }
+
+        return ! (Filament::getCurrentPanel()?->hasTenancy() ?? false);
     }
 
     public function navigationGroup(string|Closure|null $group): static
