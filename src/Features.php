@@ -73,6 +73,23 @@ class Features
         return $this;
     }
 
+    /**
+     * Forget every runtime definition — features, plans, usage counters and
+     * memoised overrides — so the next call reloads from config (and whatever
+     * the current panel's plugin defines on top). `FeaturesPlugin::configure()`
+     * calls this when a panel is registered or booted.
+     */
+    public function resetDefinitions(): static
+    {
+        $this->features = [];
+        $this->plans = [];
+        $this->usage = [];
+        $this->overrideMemo = [];
+        $this->definitionsLoaded = false;
+
+        return $this;
+    }
+
     protected function loadDefinitions(): void
     {
         if ($this->definitionsLoaded) {
