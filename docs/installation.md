@@ -63,11 +63,19 @@ Optional — every check is also available on the `Features` facade with an expl
 
 ## Admin pages
 
-On your central/admin panel:
+`FeatureFlags` (global kill switches and rollouts) and `FeatureOverrides` (trials, beta access, negotiated limits) are operator pages. Register them on your central/admin panel, with the same feature and plan definitions as the tenant panel:
 
 ```php
-$panel->plugin(FeaturesPlugin::make()->planPage(null)->adminPages());
+$panel->plugin(FeaturesPlugin::make()->features([...])->plans([...])->planPage(null)->adminPages());
 ```
+
+On a panel without tenancy they are open to everyone who can access the panel. On a tenant panel they stay hidden (navigation and route) unless you say who may open them:
+
+```php
+->adminPages()->canManageUsing(fn (User $user): bool => $user->isOperator())
+```
+
+Defining a `manageFeatures` Gate ability works too and applies on every panel.
 
 ## Scheduling
 

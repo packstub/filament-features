@@ -39,6 +39,11 @@ class FeatureFlags extends Page
         return __('packstub-features::features.flags.subheading');
     }
 
+    public static function canAccess(): bool
+    {
+        return parent::canAccess() && FeaturesPlugin::get()->canManage();
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return FeaturesPlugin::get()->getNavigationGroup() ?? parent::getNavigationGroup();

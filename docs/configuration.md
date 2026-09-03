@@ -21,7 +21,8 @@ FeaturesPlugin::make()
     ->usage('projects', fn (?Model $scope) => ...)
     ->upgradeUrl(fn (?Model $scope) => ...)     // or a string
     ->planPage(MyPlanPage::class)               // null to skip
-    ->adminPages()                              // FeatureFlags + FeatureOverrides
+    ->adminPages()                              // FeatureFlags + FeatureOverrides (central/admin panel)
+    ->canManageUsing(fn (User $user) => ...)    // who may open them; see installation
     ->navigationGroup('Account')->navigationSort(90)
     ->config(['cache.store' => 'redis']);
 ```

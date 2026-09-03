@@ -56,6 +56,7 @@ class AppPanelProvider extends PanelProvider
                     ->usage('projects', fn (?Team $team): int => $team?->projects()->count() ?? 0)
                     ->upgradeUrl(fn (?Team $team): string => '/billing/'.($team?->slug ?? 'x'))
                     ->adminPages()
+                    ->canManageUsing(fn (User $user): bool => (bool) $user->is_admin)
                     ->navigationGroup('Plan'),
             );
     }

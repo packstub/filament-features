@@ -47,6 +47,11 @@ class FeatureOverrides extends Page implements HasTable
         return __('packstub-features::features.overrides.title');
     }
 
+    public static function canAccess(): bool
+    {
+        return parent::canAccess() && FeaturesPlugin::get()->canManage();
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return FeaturesPlugin::get()->getNavigationGroup() ?? parent::getNavigationGroup();

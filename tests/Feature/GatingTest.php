@@ -4,8 +4,10 @@ use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Packstub\Features\Facades\Features;
+use Packstub\Features\FeaturesPlugin;
 use Packstub\Features\Filament\Pages\FeatureFlags;
 use Packstub\Features\Filament\Pages\FeatureOverrides;
 use Packstub\Features\Filament\Pages\Plan;
@@ -25,6 +27,7 @@ function onTeam($user, $team): void
 
 beforeEach(function () {
     $this->user = createUser();
+    $this->admin = createUser(admin: true);
     $this->free = createTeam('Free Co', 'free');
     $this->pro = createTeam('Pro Co', 'pro');
 });
@@ -99,8 +102,43 @@ it('renders the plan page with usage and an upgrade action', function () {
     livewire(Plan::class)->assertSee("You're on the Pro plan.")->assertSee('50 projects')->assertSee('Included');
 });
 
-it('manages global flags from the admin page', function () {
+it('hides the admin pages from tenant members', function () {
     onTeam($this->user, $this->free);
+
+    expect(FeatureFlags::canAccess())->toBeFalse()
+        ->and(FeatureOverrides::canAccess())->toBeFalse();
+
+    actingAs($this->user)->get("/app/{$this->free->slug}/feature-flags")->assertForbidden();
+    actingAs($this->user)->get("/app/{$this->free->slug}/feature-overrides")->assertForbidden();
+    actingAs($this->user)->get("/app/{$this->free->slug}")->assertOk()->assertDontSee('Feature flags');
+});
+
+it('shows the admin pages to whoever canManageUsing allows', function () {
+    onTeam($this->admin, $this->free);
+
+    expect(FeatureFlags::canAccess())->toBeTrue()
+        ->and(FeatureOverrides::canAccess())->toBeTrue();
+
+    actingAs($this->admin)->get("/app/{$this->free->slug}/feature-flags")->assertOk();
+    actingAs($this->admin)->get("/app/{$this->free->slug}")->assertOk()->assertSee('Feature flags')->assertSee('Feature overrides');
+});
+
+it('falls back to the manageFeatures gate, then to the panel having no tenancy', function () {
+    onTeam($this->admin, $this->free);
+    FeaturesPlugin::get()->canManageUsing(null);
+
+    expect(FeatureFlags::canAccess())->toBeFalse();   // tenant panel: closed by default
+
+    Gate::define('manageFeatures', fn ($user): bool => (bool) $user->is_admin);
+
+    expect(FeatureFlags::canAccess())->toBeTrue();
+
+    actingAs($this->user);
+    expect(FeatureFlags::canAccess())->toBeFalse();
+});
+
+it('manages global flags from the admin page', function () {
+    onTeam($this->admin, $this->free);
 
     livewire(FeatureFlags::class)
         ->assertSee('API access')
@@ -123,7 +161,7 @@ it('manages global flags from the admin page', function () {
 });
 
 it('manages per-scope overrides from the admin page', function () {
-    onTeam($this->user, $this->free);
+    onTeam($this->admin, $this->free);
 
     livewire(FeatureOverrides::class)
         ->callTableAction('create', data: ['scope' => $this->free->id, 'feature' => 'projects', 'limit' => 12, 'reason' => 'pilot'])

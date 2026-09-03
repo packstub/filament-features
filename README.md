@@ -85,7 +85,7 @@ Resolution order: **scope override → plan → global override → default**.
 ## Pages
 
 - `Plan` (tenant panel, `/plan`) — "Your plan": features by group, usage bars, upgrade button. Disable with `->planPage(null)`.
-- `FeatureFlags` and `FeatureOverrides` (admin panel) — `->adminPages()`.
+- `FeatureFlags` and `FeatureOverrides` (central/admin panel) — `->adminPages()`. Open to whoever can access a panel without tenancy; on a tenant panel they stay hidden unless `->canManageUsing(fn (User $user) => ...)` (or a `manageFeatures` Gate ability) says otherwise.
 
 ## With Filament Teams
 
