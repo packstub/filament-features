@@ -26,6 +26,10 @@ FeaturesPlugin::make()
     ->config(['cache.store' => 'redis']);
 ```
 
+### Several panels
+
+Every panel keeps its own `FeaturesPlugin` definitions. Filament registers all panels at boot, so console commands and queued jobs see the panel registered last; when a panel is served, its features, plans, usage counters and config overrides are applied again for that request. One app can therefore give an admin panel and a customer panel different scope models and plans. Keys a panel leaves unset come from the config file, never from another panel. When a seeder or test switches panels with `Filament::setCurrentPanel()`, call `FeaturesPlugin::get()->configure()` afterwards so the runtime follows.
+
 ## Commands
 
 - `features:list {scope?}` — features, defaults, plan values and the resolved value for a scope.

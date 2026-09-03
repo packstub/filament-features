@@ -176,11 +176,41 @@ class FeaturesPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        foreach ($this->configOverrides as $key => $value) {
-            config()->set("packstub-features.{$key}", $value);
-        }
+        $this->configure();
+
+        $panel->pages(array_values(array_filter([$this->planPage, $this->flagsPage, $this->overridesPage])));
+    }
+
+    public function boot(Panel $panel): void
+    {
+        $this->configure();
+    }
+
+    /**
+     * Push this panel's settings into the shared runtime: the
+     * `packstub-features.*` config and the `Features` singleton (feature and
+     * plan definitions, usage counters, plan resolver, upgrade URL).
+     *
+     * Filament registers every panel at boot, so after registration the
+     * runtime holds the settings of the panel registered last — that is what
+     * console commands and queued jobs see. When a panel is served, Filament
+     * boots only that panel and this runs again, so apps with several panels
+     * (different scope models, different plans) each get their own
+     * definitions per request. Seeders and tests that switch panels with
+     * `Filament::setCurrentPanel()` call `FeaturesPlugin::get()->configure()`
+     * afterwards.
+     *
+     * Settings this panel leaves unset fall back to the config file, not to
+     * whatever another panel applied before; config keys no panel overrides
+     * are never touched.
+     */
+    public function configure(): static
+    {
+        $this->applyConfigOverrides();
 
         $features = app(Features::class);
+
+        $features->resetDefinitions();
 
         if ($this->features !== []) {
             $features->define($this->features);
@@ -190,20 +220,42 @@ class FeaturesPlugin implements Plugin
             $features->definePlans($this->plans);
         }
 
-        if ($this->planUsing) {
-            $features->planUsing($this->planUsing);
-        }
+        $features->planUsing($this->planUsing);
 
         foreach ($this->usage as $feature => $callback) {
             $features->usageUsing($feature, $callback);
         }
 
-        if ($this->upgradeUrl !== null) {
-            $features->upgradeUrlUsing($this->upgradeUrl);
-        }
+        $features->upgradeUrlUsing($this->upgradeUrl);
 
-        $panel->pages(array_values(array_filter([$this->planPage, $this->flagsPage, $this->overridesPage])));
+        return $this;
     }
 
-    public function boot(Panel $panel): void {}
+    /**
+     * Apply this panel's `packstub-features.*` overrides. Keys another panel overrode
+     * earlier go back to their original value first, so a panel that leaves a
+     * key unset gets the config file's value, not the other panel's. Keys no
+     * panel touches are left alone — runtime changes to them survive.
+     */
+    protected function applyConfigOverrides(): void
+    {
+        $store = 'packstub-features.config-originals';
+
+        /** @var array<string, mixed> $originals */
+        $originals = app()->bound($store) ? app($store) : [];
+
+        foreach ($originals as $key => $value) {
+            config()->set("packstub-features.{$key}", $value);
+        }
+
+        foreach ($this->configOverrides as $key => $value) {
+            if (! array_key_exists($key, $originals)) {
+                $originals[$key] = config("packstub-features.{$key}");
+            }
+
+            config()->set("packstub-features.{$key}", $value);
+        }
+
+        app()->instance($store, $originals);
+    }
 }
