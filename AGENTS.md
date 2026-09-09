@@ -1,6 +1,6 @@
 # packstub/filament-features
 
-Paid Filament v5 plugin: feature flags and entitlements per tenant (plans, limits, overrides, gating). Sold on packstub.dev as **Filament Features**; listed on filamentphp.com as **Packstub Features**.
+Paid Filament v5 plugin: feature flags and entitlements per tenant (plans, limits, overrides, gating). Paid: **Filament Features** on packstub.dev, **Packstub Features** on filamentphp.com.
 
 ## Commands
 
@@ -14,10 +14,9 @@ composer lint               # Pint
 - `src/Features.php` — the resolver (scope override → plan → global → default) and override store; `ScopedFeatures` is the per-scope fluent API.
 - `src/Support/Feature|Plan` — definitions; `src/Filament/Pages` — `Plan` (tenant), `FeatureFlags` + `FeatureOverrides` (admin).
 - Gating lives in the service provider (middleware alias `feature`, `@feature`, `requiresFeature` macros).
-- `docs/` customer docs (synced to the store). Demo: `../../demos/packstub-demo` (with Tenancy + Teams) and `../../demos/filament-teams-demo` (browser E2E, screenshots rig `scripts/screenshots-features.mjs`).
+- `docs/` customer docs. Demo: `../../demos/packstub-demo` (with Tenancy + Teams) and `../../demos/filament-teams-demo` (browser E2E, screenshots rig `scripts/screenshots-features.mjs`).
 
 ## Conventions
 
-- PHP 8.3+, Pint, Pest; every change needs a test. Keep `CHANGELOG.md` current.
-- Release = a `## <version>` heading in `CHANGELOG.md`, then a `v<version>` tag on `main`. `.github/workflows/github-release.yml` creates the GitHub release from that changelog section (manual run with a `tag` input for backfills) — no manual release step.
+- Every change needs a test and a `CHANGELOG.md` line.
 - Limit features: `null` = unlimited, `0` = off. Never store resolved values — only overrides.
