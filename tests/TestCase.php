@@ -87,5 +87,6 @@ abstract class TestCase extends Orchestra
         $app['config']->set('app.url', 'http://localhost');
         $app['config']->set('view.paths', [__DIR__.'/Fixtures/views']);
         $app['config']->set('packstub-features.scope_model', Team::class);
+        $app['config']->set('packstub-features.default_plan', 'free');
     }
 }

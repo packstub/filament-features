@@ -14,6 +14,10 @@ it('applies definitions per panel and restores keys another panel overrode', fun
         ->features(['zeta_b' => ['type' => 'limit', 'default' => 2]])
         ->usage('zeta_b', fn (): int => 1);
 
+    // The app's own value before any panel touches the key; the fixture panel
+    // pinned default_plan ('free', see TestCase) when it registered at boot.
+    config()->set('packstub-features.cache.ttl', 123);
+
     $panelA->configure();
 
     expect(Features::has('zeta_a'))->toBeTrue()
@@ -27,5 +31,5 @@ it('applies definitions per panel and restores keys another panel overrode', fun
         ->and(Features::has('zeta_b'))->toBeTrue()
         ->and(Features::used('zeta_b', $team))->toBe(1)
         ->and(config('packstub-features.default_plan'))->toBe('free')
-        ->and(config('packstub-features.cache.ttl'))->toBe(300);
+        ->and(config('packstub-features.cache.ttl'))->toBe(123);
 });
