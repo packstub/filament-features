@@ -14,7 +14,7 @@ composer lint               # Pint
 - `src/Features.php` — the resolver (scope override → plan → global → default) and override store; `ScopedFeatures` is the per-scope fluent API.
 - `src/Support/Feature|Plan` — definitions; `src/Filament/Pages` — `Plan` (tenant), `FeatureFlags` + `FeatureOverrides` (admin).
 - Gating lives in the service provider (middleware alias `feature`, `@feature`, `requiresFeature` macros).
-- `docs/` customer docs. Demo: `../../demos/packstub-demo` (with Tenancy + Teams) and `../../demos/filament-teams-demo` (browser E2E, screenshots rig `scripts/screenshots-features.mjs`).
+- `docs/` customer docs.
 
 ## Conventions
 
