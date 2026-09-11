@@ -2,7 +2,7 @@
 
 <div class="filament-hidden">
 
-![Filament Features — plans, limits and flags per tenant](https://packstub.dev/images/docs/filament-features/banner.jpg)
+![Filament Features — plans, limits and flags per tenant](https://raw.githubusercontent.com/packstub/art/main/filament-features/banner.jpg)
 
 </div>
 

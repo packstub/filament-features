@@ -17,11 +17,11 @@ Expired overrides stop applying immediately and are deleted by `features:prune`.
 
 ## Admin pages
 
-<img src="https://packstub.dev/images/docs/filament-features/feature-flags.png" alt="Feature flags page with defaults, plan values and global overrides">
+<img src="https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/feature-flags.png" alt="Feature flags page with defaults, plan values and global overrides">
 
 **Feature flags** lists every feature with its default, each plan's value and the global override, with *Enable globally* (a limit value for limit features), *Disable globally* and *Clear*.
 
-<img src="https://packstub.dev/images/docs/filament-features/feature-overrides.png" alt="Feature overrides page">
+<img src="https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/feature-overrides.png" alt="Feature overrides page">
 
 **Feature overrides** is a table of per-scope overrides with create, edit and remove — scope picker, feature, on/off or limit (or unlimited), reason and expiry.
 
