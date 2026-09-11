@@ -67,10 +67,10 @@ Section::make('Integrations')->requiresFeature('api_access', fn () => $this->rec
 @endfeature
 ```
 
-<img src="https://packstub.dev/images/docs/filament-features/locked.png" alt="Locked feature card with an upgrade button">
+<img src="https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/locked.png" alt="Locked feature card with an upgrade button">
 
 ## The plan page
 
 `Packstub\Features\Filament\Pages\Plan` (`/plan`) shows every feature by group, usage bars for limits with a resolver, "custom" markers for overrides, and an Upgrade button when an upgrade URL exists.
 
-<img src="https://packstub.dev/images/docs/filament-features/plan.png" alt="Your plan page with usage bars">
+<img src="https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/plan.png" alt="Your plan page with usage bars">
