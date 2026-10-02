@@ -8,12 +8,15 @@
 
 Feature flags and entitlements for Filament v5 tenants: define features and plans in code, store per-tenant overrides and global kill switches, check limits against real usage, and gate pages, actions, routes and Blade with one call.
 
-- **Features & plans in code** — boolean features and numeric limits with defaults; plans bundle values; the plan comes from any source (a column, a subscription).
-- **Overrides** — per-tenant trials, beta access and negotiated limits with expiry and reason; global overrides as kill switches or rollouts.
-- **Usage-aware limits** — `remaining()`, `canUse()`, `assertCanUse()` against a usage resolver; events when a limit is hit.
-- **Gating everywhere** — `feature:` middleware, `@feature` Blade directive, `->requiresFeature()` on actions and form components, `RequiresFeature` trait for pages/resources, `<x-packstub-features::locked>` upgrade card.
-- **UI** — a tenant "Your plan" page with usage bars and an upgrade CTA; admin pages for flags and overrides.
-- **Caching, commands, events** — per-request memo plus optional cache store; `features:list`, `features:prune`.
+## Features
+
+- **[Features and plans in code](#installation)**: on/off features and numeric limits, bundled into plans; the plan comes from any source.
+- **[One call to check](#checking)**: whether a feature is on, its limit and what's left against real usage.
+- **[Gating everywhere](#checking)**: routes, actions, form fields, pages and Blade, with an upgrade card when something is locked.
+- **[Overrides](#overrides)**: trials, beta access and custom limits per tenant, global kill switches, each with an expiry and a reason.
+- **[Plan and admin pages](#pages)**: "Your plan" with usage bars for tenants, flags and overrides for operators.
+- **[Works with Filament Teams](#with-filament-teams)**: seat limits straight from the plan.
+- **[Caching, commands and events](#configuration)**: a per-request memo with an optional cache store, list and prune commands, events when a limit is hit.
 
 ## Installation
 
@@ -96,6 +99,8 @@ TeamsPlugin::make()->seatLimit(fn (Team $team) => Features::limit('seats', $team
 ## Configuration
 
 See `config/packstub-features.php`: `scope_model`, `features`, `plans`, `default_plan`, `overrides_table`, `connection`, `cache.store` / `ttl`, `upgrade_url`. Anything can be overridden per panel with `->config([...])`.
+
+Commands: `features:list` prints every feature with its resolved value for a tenant, `features:prune` deletes expired overrides.
 
 ## Testing
 

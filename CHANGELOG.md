@@ -2,6 +2,12 @@
 
 All notable changes to `packstub/filament-features` are documented here.
 
+## Unreleased
+
+### Changed
+
+- **Docs**: a shorter Features list in the README, under its own `## Features` heading, and on the docs index, one line per area; the README's Configuration section lists the `features:list` and `features:prune` commands.
+
 ## 1.1.0 — 2026-09-03
 
 ### Added
