@@ -18,5 +18,5 @@ composer lint               # Pint
 
 ## Conventions
 
-- Every change needs a test and a `CHANGELOG.md` line.
+- Every change needs a test and a `CHANGELOG.md` line. A version's section becomes the top of its GitHub release (the workflow appends the merged pull requests), so keep it short and plain: an optional lead sentence, at most ~6 one-line bullets saying what a user gets, method names only when needed to use them; always keep breaking changes (an `**Upgrading:**` line), security fixes, new minimum versions and migrations to run.
 - Limit features: `null` = unlimited, `0` = off. Never store resolved values — only overrides.

@@ -4,35 +4,24 @@ All notable changes to `packstub/filament-features` are documented here.
 
 ## Unreleased
 
-### Changed
-
-- **Docs**: a shorter Features list in the README, under its own `## Features` heading, and on the docs index, one line per area; the README's Configuration section lists the `features:list` and `features:prune` commands.
+- Docs: a shorter Features list in the README and on the docs index, and the README lists the `features:list` and `features:prune` commands
 
 ## 1.1.0 — 2026-09-03
 
-### Added
-
-- `FeaturesPlugin::canManageUsing(fn (User $user): bool)` decides who may open `FeatureFlags` and `FeatureOverrides`; a `manageFeatures` Gate ability is honoured when defined.
-
-### Changed
-
-- The admin pages check access: on a panel without tenancy they stay open to whoever can access the panel; on a tenant panel they are now hidden from navigation and return 403 unless `canManageUsing()` or the Gate ability allows the user — before, every tenant member could flip global kill switches.
-
-- `FeaturesPlugin` applies its settings per panel: `configure()` pushes the panel's config overrides, feature and plan definitions, usage counters, plan resolver and upgrade URL into the runtime when the panel is registered *and* again when it boots, so an app can run several panels with different scope models and plans. Settings a panel leaves unset now fall back to the config file instead of what another panel applied. Seeders and tests that switch panels with `Filament::setCurrentPanel()` call `FeaturesPlugin::get()->configure()` afterwards.
-- `Features::resetDefinitions()` forgets runtime definitions so they reload from config.
-
-### Docs
-
-- Screenshots of the flags and overrides pages re-taken from an operator panel, matching where the pages now belong.
+- Choose who may manage flags and overrides with `FeaturesPlugin::canManageUsing()` or a `manageFeatures` Gate ability
+- Tenant members can no longer flip global kill switches: on a tenant panel the admin pages are hidden and return 403 unless allowed
+- Run several panels with different scopes and plans: settings now apply per panel, and unset ones fall back to the config file
+- **Upgrading:** on a tenant panel, let your operators in with `canManageUsing()` or the Gate ability. Seeders and tests that switch panels with `Filament::setCurrentPanel()` call `FeaturesPlugin::get()->configure()` afterwards.
+- Docs: screenshots of the flags and overrides pages re-taken from an operator panel
 
 ## 1.0.0 — 2026-08-26
 
-Initial release.
+First release of Filament Features: plans, limits and overrides per tenant, with feature gating in your Filament panel.
 
-### Added
+- Features and plans in config or on the plugin, as on/off flags or limits
+- Overrides per tenant, with an expiry and a reason, and global kill switches
+- Check a feature anywhere: `Features::canUse()`, the `feature:` middleware, `@feature` in Blade, `requiresFeature()` on actions
+- A Plan page for tenants, and Feature flags and Overrides pages for operators
+- Events when a feature is overridden or a limit is exceeded
 
-- Feature and plan definitions (config or `FeaturesPlugin::features()` / `plans()`), boolean and limit types, groups, units, descriptions.
-- Resolution: scope override → plan → global override → default; `Features::value/active/limit/used/remaining/canUse/assertCanUse/snapshot/source`, `Features::for($scope)`, `HasFeatures` trait.
-- Overrides with expiry and reason, global kill switches, `features:prune`, per-request memo and optional cache store, `FeatureOverridden` / `FeatureOverrideCleared` / `FeatureLimitExceeded` events.
-- Gating: `feature:` middleware (abort or redirect), `@feature` Blade directive, `requiresFeature()` macro on actions and schema components, `RequiresFeature` trait, `<x-packstub-features::locked>` component.
-- Filament pages: tenant `Plan`, admin `FeatureFlags` and `FeatureOverrides`; `features:list` command.
+Docs: https://packstub.dev/docs/filament-features
