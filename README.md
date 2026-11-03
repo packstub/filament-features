@@ -8,6 +8,8 @@
 
 Feature flags and entitlements for Filament v5 tenants: define features and plans in code, store per-tenant overrides and global kill switches, check limits against real usage, and gate pages, actions, routes and Blade with one call.
 
+![Switching from a Pro team to a Free team: the same Reports page shows an upgrade card, and Upgrade opens the plan page with its limits and usage](https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/features.gif)
+
 ## Features
 
 - **[Features and plans in code](#installation)**: on/off features and numeric limits, bundled into plans; the plan comes from any source.

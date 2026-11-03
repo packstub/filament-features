@@ -4,6 +4,8 @@
 
 Packstub Features is a premium plugin that turns "what is this tenant allowed to do?" into one call. Define features and plans in code, resolve per tenant with overrides for trials and exceptions, check limits against real usage, and gate pages, actions, routes and Blade with the same vocabulary. Ships with a tenant-facing "Your plan" page and admin pages for flags and overrides.
 
+![Switching from a Pro team to a Free team: the same Reports page shows an upgrade card, and Upgrade opens the plan page with its limits and usage](https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/features.gif)
+
 ## Features
 
 - **[Features and plans in code](installation.md#defining-features-and-plans)**: on/off features and numeric limits, bundled into plans; the plan comes from any source.
