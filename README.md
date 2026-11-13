@@ -4,6 +4,12 @@
 
 ![Filament Features — plans, limits and flags per tenant](https://raw.githubusercontent.com/packstub/art/main/filament-features/banner.jpg)
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/packstub/filament-features.svg?style=flat-square)](https://packagist.org/packages/packstub/filament-features)
+[![Tests](https://img.shields.io/github/actions/workflow/status/packstub/filament-features/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/packstub/filament-features/actions/workflows/tests.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/packstub/filament-features.svg?style=flat-square)](https://packagist.org/packages/packstub/filament-features)
+[![License](https://img.shields.io/packagist/l/packstub/filament-features.svg?style=flat-square)](https://github.com/packstub/filament-features/blob/main/LICENSE.md)
+[![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/icaliman)
+
 </div>
 
 Feature flags and entitlements for Filament v5 tenants: define features and plans in code, store per-tenant overrides and global kill switches, check limits against real usage, and gate pages, actions, routes and Blade with one call.
@@ -19,6 +25,12 @@ Feature flags and entitlements for Filament v5 tenants: define features and plan
 - **[Plan and admin pages](#pages)**: "Your plan" with usage bars for tenants, flags and overrides for operators.
 - **[Works with Filament Teams](#with-filament-teams)**: seat limits straight from the plan.
 - **[Caching, commands and events](#configuration)**: a per-request memo with an optional cache store, list and prune commands, events when a limit is hit.
+
+## Compatibility
+
+| Plugin | Filament | Laravel | PHP |
+| --- | --- | --- | --- |
+| 1.x | 5.x | 12.x, 13.x | 8.3+ |
 
 ## Installation
 
@@ -104,12 +116,38 @@ See `config/packstub-features.php`: `scope_model`, `features`, `plans`, `default
 
 Commands: `features:list` prints every feature with its resolved value for a tenant, `features:prune` deletes expired overrides.
 
+## Documentation
+
+- [Installation](https://packstub.dev/docs/filament-features/installation)
+- [Checking features](https://packstub.dev/docs/filament-features/checking)
+- [Overrides and flags](https://packstub.dev/docs/filament-features/overrides)
+- [Configuration](https://packstub.dev/docs/filament-features/configuration)
+
+The same pages live in the [`docs/`](https://github.com/packstub/filament-features/tree/main/docs) directory of this repository.
+
 ## Testing
 
 ```bash
 composer test
 ```
 
+## Changelog
+
+See the [changelog](https://github.com/packstub/filament-features/blob/main/CHANGELOG.md).
+
+## Contributing
+
+See [CONTRIBUTING](https://github.com/packstub/filament-features/blob/main/.github/CONTRIBUTING.md).
+
+## Security
+
+See [our security policy](https://github.com/packstub/filament-features/security/policy).
+
+## Credits
+
+- [Ion Caliman](https://github.com/icaliman) and [Packstub](https://packstub.dev)
+- [All contributors](https://github.com/packstub/filament-features/graphs/contributors)
+
 ## License
 
-Commercial — see [LICENSE.md](LICENSE.md). Support: support@packstub.dev.
+The MIT License (MIT). See [LICENSE](https://github.com/packstub/filament-features/blob/main/LICENSE.md).

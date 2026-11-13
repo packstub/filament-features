@@ -6,20 +6,14 @@
 |---|---|---|---|
 | `1.x` | `^5.0` | `^12.0` / `^13.0` | `8.3+` |
 
-## Purchasing a license
-
-Licenses are sold at [packstub.dev/plugins/filament-features](https://packstub.dev/plugins/filament-features). After purchase, create an access token on the **Install Guide** page of your Packstub dashboard.
-
 ## Installing with Composer
 
 ```bash
-composer config repositories.packstub-filament-features composer https://packstub.dev/composer/filament-features
-composer config --auth http-basic.packstub.dev pkg_xxxxxxxxxxxxxxxx your-token-secret
 composer require packstub/filament-features
 php artisan packstub-features:install
 ```
 
-The installer publishes `config/packstub-features.php` and the `feature_overrides` migration (string scope ids, so integer, UUID and Tenancy string keys all fit).
+Filament Features is free and open source (MIT) and installs from Packagist. The installer publishes `config/packstub-features.php` and the `feature_overrides` migration (string scope ids, so integer, UUID and Tenancy string keys all fit).
 
 ## Defining features and plans
 
