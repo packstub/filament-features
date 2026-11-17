@@ -1,8 +1,12 @@
-# Packstub Features
+# Filament Features
 
 **Plans, limits and flags — per tenant.**
 
-Packstub Features is a premium plugin that turns "what is this tenant allowed to do?" into one call. Define features and plans in code, resolve per tenant with overrides for trials and exceptions, check limits against real usage, and gate pages, actions, routes and Blade with the same vocabulary. Ships with a tenant-facing "Your plan" page and admin pages for flags and overrides.
+Filament Features turns "what is this tenant allowed to do?" into one call. Define features and plans in code, resolve per tenant with overrides for trials and exceptions, check limits against real usage, and gate pages, actions, routes and Blade with the same vocabulary. Ships with a tenant-facing "Your plan" page and admin pages for flags and overrides. Free and open source (MIT).
+
+- Repository: [github.com/packstub/filament-features](https://github.com/packstub/filament-features)
+- Packagist: [packstub/filament-features](https://packagist.org/packages/packstub/filament-features)
+- Support: [GitHub issues](https://github.com/packstub/filament-features/issues)
 
 ![Switching from a Pro team to a Free team: the same Reports page shows an upgrade card, and Upgrade opens the plan page with its limits and usage](https://raw.githubusercontent.com/packstub/art/main/filament-features/docs/features.gif)
 
@@ -20,7 +24,7 @@ Packstub Features is a premium plugin that turns "what is this tenant allowed to
 
 | Guide | What's inside |
 |---|---|
-| [Installation](installation.md) | Registry auth, definitions, tenant model, admin pages |
+| [Installation](installation.md) | Requirements, Composer install, definitions, tenant model, admin pages |
 | [Checking features](checking.md) | Values, limits, usage, enforcing, gating, the plan page |
 | [Overrides and flags](overrides.md) | Per-tenant overrides, kill switches, admin pages, caching, events |
 | [Configuration](configuration.md) | Every key, the plugin API, commands, Teams and Tenancy |

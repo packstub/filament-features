@@ -1,12 +1,13 @@
 # packstub/filament-features
 
-Paid Filament v5 plugin: feature flags and entitlements per tenant (plans, limits, overrides, gating). Paid: **Filament Features** on packstub.dev, **Packstub Features** on filamentphp.com.
+Free (MIT) Filament v5 plugin: feature flags and entitlements per tenant (plans, limits, overrides, gating). Installed from Packagist; one name everywhere, **Filament Features** (just **Features** on filamentphp.com, whose directory drops "Filament").
 
 ## Commands
 
 ```bash
 composer test               # Pest
 composer lint               # Pint
+bash .github/scripts/package-health.sh   # what the Package health workflow checks
 ```
 
 ## Layout
@@ -14,7 +15,7 @@ composer lint               # Pint
 - `src/Features.php` — the resolver (scope override → plan → global → default) and override store; `ScopedFeatures` is the per-scope fluent API.
 - `src/Support/Feature|Plan` — definitions; `src/Filament/Pages` — `Plan` (tenant), `FeatureFlags` + `FeatureOverrides` (admin).
 - Gating lives in the service provider (middleware alias `feature`, `@feature`, `requiresFeature` macros).
-- `docs/` customer docs.
+- `docs/` customer docs synced to packstub.dev.
 
 ## Conventions
 

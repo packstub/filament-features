@@ -4,6 +4,8 @@ All notable changes to `packstub/filament-features` are documented here.
 
 ## Unreleased
 
+- Filament Features is now free and open source under the MIT licence, and installs from Packagist with `composer require packstub/filament-features`
+- **Upgrading:** if your project installs it from the `packstub.dev` Composer repository, remove that repository and its `http-basic.packstub.dev` credentials, then run `composer update packstub/filament-features`. Nothing changes in the code.
 - Docs: a shorter Features list in the README and on the docs index, and the README lists the `features:list` and `features:prune` commands
 
 ## 1.1.0 — 2026-09-03
