@@ -19,8 +19,8 @@ A free plugin: one name everywhere, **Filament Features**; the directory drops "
 
 ## Still to do
 
-- [ ] Make the GitHub repository public
-- [ ] Submit `packstub/filament-features` to Packagist and check the auto-update hook
-- [ ] Tag the first release that carries the MIT licence
+- [x] Make the GitHub repository public (2026-11-17)
+- [x] Submit `packstub/filament-features` to Packagist and check the auto-update hook (dev-main follows main)
+- [ ] Tag the first release that carries the MIT licence (`v1.1.1`)
 - [ ] Enable GitHub Discussions (the issue chooser links the Q&A and Ideas categories)
 - [ ] Submit the listing on filamentphp.com with the values above
