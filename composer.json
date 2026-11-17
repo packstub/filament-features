@@ -2,7 +2,7 @@
     "name": "packstub/filament-features",
     "description": "Feature flags and entitlements for Filament tenants — plan-based features and limits, per-tenant overrides, kill switches, usage checks, and gating for pages, actions, routes and Blade.",
     "keywords": ["packstub", "laravel", "filament", "filament-plugin", "filament-v5", "feature-flags", "entitlements", "plans", "limits", "multi-tenancy", "saas", "pennant"],
-    "homepage": "https://github.com/packstub/filament-features",
+    "homepage": "https://packstub.dev/plugins/filament-features",
     "support": {"issues": "https://github.com/packstub/filament-features/issues", "source": "https://github.com/packstub/filament-features", "docs": "https://packstub.dev/docs/filament-features"},
     "type": "library",
     "license": "MIT",
