@@ -16,6 +16,7 @@ use Packstub\Features\Exceptions\UnknownFeature;
 use Packstub\Features\Models\FeatureOverride;
 use Packstub\Features\Support\Feature;
 use Packstub\Features\Support\Plan;
+use Packstub\Features\Support\UsageMemo;
 
 /**
  * Resolves what a scope (tenant) is entitled to:
@@ -84,6 +85,7 @@ class Features
         $this->features = [];
         $this->plans = [];
         $this->usage = [];
+        $this->usageMemo()->flush();
         $this->overrideMemo = [];
         $this->definitionsLoaded = false;
 
@@ -152,6 +154,7 @@ class Features
     public function usageUsing(string $feature, Closure $callback): static
     {
         $this->usage[$feature] = $callback;
+        $this->usageMemo()->forgetFeature($feature);
 
         return $this;
     }
@@ -288,42 +291,82 @@ class Features
 
     /**
      * Current usage from the registered usage resolver (0 without one).
+     *
+     * The resolver runs once per scope and feature in a request (or queued
+     * job); later calls answer from memory until a model is saved or deleted,
+     * or forgetUsage() is called. Pass $fresh to run the resolver anyway, as
+     * a check under a lock must.
      */
-    public function used(string $feature, ?Model $scope = null): int
+    public function used(string $feature, ?Model $scope = null, bool $fresh = false): int
     {
         $scope ??= $this->currentScope();
 
         $resolver = $this->usage[$feature] ?? null;
 
-        return $resolver ? (int) $resolver($scope) : 0;
+        if (! $resolver) {
+            return 0;
+        }
+
+        $memo = $this->usageMemo();
+        $key = $this->scopeKey($scope);
+
+        if (! $fresh && $memo->has($key, $feature)) {
+            return $memo->get($key, $feature);
+        }
+
+        return $memo->put($key, $feature, (int) $resolver($scope));
     }
 
     /**
      * Remaining allowance; null = unlimited.
      */
-    public function remaining(string $feature, ?Model $scope = null): ?int
+    public function remaining(string $feature, ?Model $scope = null, bool $fresh = false): ?int
     {
         $limit = $this->limit($feature, $scope);
 
-        return $limit === null ? null : max(0, $limit - $this->used($feature, $scope));
+        return $limit === null ? null : max(0, $limit - $this->used($feature, $scope, $fresh));
     }
 
     /**
-     * Can the scope consume $amount more of the feature right now?
+     * Can the scope consume $amount more of the feature right now? Pass
+     * $fresh when the answer guards a write (inside a lock), so usage is
+     * counted again instead of read from earlier in the request.
      */
-    public function canUse(string $feature, ?Model $scope = null, int $amount = 1): bool
+    public function canUse(string $feature, ?Model $scope = null, int $amount = 1, bool $fresh = false): bool
     {
         if (! $this->active($feature, $scope)) {
             return false;
         }
 
-        $remaining = $this->remaining($feature, $scope);
+        $remaining = $this->remaining($feature, $scope, $fresh);
 
         return $remaining === null || $remaining >= $amount;
     }
 
     /**
-     * Like canUse(), but throws FeatureInactive / FeatureLimitReached.
+     * Forget the usage remembered for a feature (or every feature) of a
+     * scope; the current tenant when no scope is given.
+     */
+    public function forgetUsage(?string $feature = null, ?Model $scope = null): static
+    {
+        $this->usageMemo()->forget($this->scopeKey($scope ?? $this->currentScope()), $feature);
+
+        return $this;
+    }
+
+    /**
+     * Forget every usage count remembered in this request.
+     */
+    public function forgetAllUsage(): static
+    {
+        $this->usageMemo()->flush();
+
+        return $this;
+    }
+
+    /**
+     * Like canUse(), but throws FeatureInactive / FeatureLimitReached. It is
+     * the check that guards a write, so usage is always counted fresh.
      */
     public function assertCanUse(string $feature, ?Model $scope = null, int $amount = 1): void
     {
@@ -339,7 +382,7 @@ class Features
             return;
         }
 
-        $used = $this->used($feature, $scope);
+        $used = $this->used($feature, $scope, fresh: true);
 
         if ($used + $amount > $limit) {
             FeatureLimitExceeded::dispatch($scope, $feature, $limit, $used);
@@ -503,6 +546,11 @@ class Features
         $this->flush(all: true);
 
         return $count;
+    }
+
+    protected function usageMemo(): UsageMemo
+    {
+        return app(UsageMemo::class);
     }
 
     protected function scopeKey(?Model $scope): string

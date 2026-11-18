@@ -48,19 +48,26 @@ final class ScopedFeatures
         return $this->features->limit($feature, $this->scope);
     }
 
-    public function used(string $feature): int
+    public function used(string $feature, bool $fresh = false): int
     {
-        return $this->features->used($feature, $this->scope);
+        return $this->features->used($feature, $this->scope, $fresh);
     }
 
-    public function remaining(string $feature): ?int
+    public function remaining(string $feature, bool $fresh = false): ?int
     {
-        return $this->features->remaining($feature, $this->scope);
+        return $this->features->remaining($feature, $this->scope, $fresh);
     }
 
-    public function canUse(string $feature, int $amount = 1): bool
+    public function canUse(string $feature, int $amount = 1, bool $fresh = false): bool
     {
-        return $this->features->canUse($feature, $this->scope, $amount);
+        return $this->features->canUse($feature, $this->scope, $amount, $fresh);
+    }
+
+    public function forgetUsage(?string $feature = null): static
+    {
+        $this->features->forgetUsage($feature, $this->scope);
+
+        return $this;
     }
 
     public function assertCanUse(string $feature, int $amount = 1): void

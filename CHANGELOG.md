@@ -4,6 +4,9 @@ All notable changes to `packstub/filament-features` are documented here.
 
 ## Unreleased
 
+- Usage is counted once per request: `used()`, `remaining()`, `canUse()` and the plan page share one count per tenant and feature, counted again after a model is saved or deleted and never kept across Octane requests or queued jobs
+- `Features::forgetUsage()` and `Features::forgetAllUsage()` drop remembered usage when it changes without a model event
+- **Upgrading:** a limit check under a lock reads a fresh count with `canUse(..., fresh: true)` (also on `remaining()`, `used()` and `canUseFeature()`); `assertCanUse()` always does
 - `assertCanUse()` runs the usage resolver once instead of up to three times when a limit is reached
 
 ## 1.1.1 — 2026-11-17
