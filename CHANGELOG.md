@@ -2,7 +2,7 @@
 
 All notable changes to `packstub/filament-features` are documented here.
 
-## Unreleased
+## 1.2.0 — 2026-11-18
 
 - Usage is counted once per request: `used()`, `remaining()`, `canUse()` and the plan page share one count per tenant and feature, counted again after a model is saved or deleted and never kept across Octane requests or queued jobs
 - `Features::forgetUsage()` and `Features::forgetAllUsage()` drop remembered usage when it changes without a model event
