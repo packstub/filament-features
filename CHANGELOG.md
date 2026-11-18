@@ -2,6 +2,10 @@
 
 All notable changes to `packstub/filament-features` are documented here.
 
+## Unreleased
+
+- `assertCanUse()` runs the usage resolver once instead of up to three times when a limit is reached
+
 ## 1.1.1 — 2026-11-17
 
 Filament Features is now free and open source under the MIT licence.

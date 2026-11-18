@@ -335,10 +335,16 @@ class Features
 
         $limit = $this->limit($feature, $scope);
 
-        if ($limit !== null && $this->used($feature, $scope) + $amount > $limit) {
-            FeatureLimitExceeded::dispatch($scope, $feature, $limit, $this->used($feature, $scope));
+        if ($limit === null) {
+            return;
+        }
 
-            throw new FeatureLimitReached($feature, $limit, $this->used($feature, $scope));
+        $used = $this->used($feature, $scope);
+
+        if ($used + $amount > $limit) {
+            FeatureLimitExceeded::dispatch($scope, $feature, $limit, $used);
+
+            throw new FeatureLimitReached($feature, $limit, $used);
         }
     }
 
