@@ -37,14 +37,14 @@ trait HasFeatures
         return Features::limit($feature, $this);
     }
 
-    public function featureRemaining(string $feature): ?int
+    public function featureRemaining(string $feature, bool $fresh = false): ?int
     {
-        return Features::remaining($feature, $this);
+        return Features::remaining($feature, $this, $fresh);
     }
 
-    public function canUseFeature(string $feature, int $amount = 1): bool
+    public function canUseFeature(string $feature, int $amount = 1, bool $fresh = false): bool
     {
-        return Features::canUse($feature, $this, $amount);
+        return Features::canUse($feature, $this, $amount, $fresh);
     }
 
     public function featurePlan(): ?string
